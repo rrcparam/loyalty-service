@@ -103,17 +103,33 @@ app.post("/api/customers/:id/purchase", (req: Request, res: Response): void => {
  * @param req - Express request object
  * @param res - Express response object
  */
+bugfix/BUG-145
+app.post(
+=======
 app.patch(
+ main
     "/api/customers/:id/preferences",
     (req: Request, res: Response): void => {
         const customerId: number = parseInt(req.params.id);
         const customer: Customer | undefined = customers.find(
             (c) => c.id === customerId
         );
+bugfix/BUG-145
+          const adjustment = req.body.adjustment;
+
+        if (typeof adjustment !== "number") {
+        res.status(400).send("Adjustment must be a number.");
+        return;
+    }
+=======
+ main
         if (!customer) {
             res.status(404).send("Customer not found");
             return;
         }
+ bugfix/BUG-145
+        customer.points = Math.max(0, customer.points + adjustment);
+======= main
 
         if (typeof req.body.notifications === "boolean") {
             customer.notifications = req.body.notifications;
